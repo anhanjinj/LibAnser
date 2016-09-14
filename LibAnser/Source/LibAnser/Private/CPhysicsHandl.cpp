@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "LibAnserPrivatePCH.h"
+#include "AliceAllCPlus.h"
 #include "CPhysicsHandl.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -70,13 +70,13 @@ void UCPhysicsHandle::TickComponent( float DeltaTime, ELevelTick TickType, FActo
 
 }
 
-void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
+AActor * UCPhysicsHandle::GrabActor(AActor* pActorToGrab, TSubclassOf<AActor> ClassFilter)
 {
 	if (!IsValid(m_physicsHandle))
 	{
 		GLog->Log("UCPhysicsHandl - GrabCompoinent : m_physicsHandle is invalid!!!");
 
-		return;
+		return nullptr;
 	}
 
 
@@ -88,13 +88,14 @@ void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
 	if (!pActorToGrab)
 	{
 		TArray<AActor*> overlapActors;
-		m_Parent->GetOverlappingActors(overlapActors);
+
+		m_Parent->GetOverlappingActors(overlapActors, ClassFilter);
 		
 
 		if (overlapActors.Num() == 0)
 		{
 
-			return;
+			return nullptr;
 
 		}
 
@@ -103,9 +104,10 @@ void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
 		if (!IsValid(firstOverlap))
 		{
 
-			return;
+			return nullptr;
 
 		}
+
 
 		m_GrabObject = firstOverlap;
 
@@ -122,7 +124,7 @@ void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
 	if (subObjects.Num() == 0)
 	{
 		
-		return;
+		return nullptr;
 
 	}
 
@@ -142,7 +144,7 @@ void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
 	if (!IsValid(firstPrivate))
 	{
 
-		return;
+		return nullptr;
 
 	}
 
@@ -160,11 +162,14 @@ void UCPhysicsHandle::GrabActor( AActor* pActorToGrab)
 	FVector fvParentHandLoc = m_Parent->GetComponentToWorld().GetLocation();
 	m_physicsHandle->GrabComponent(firstPrivate, FName("None"), fvParentHandLoc, true);
 
+
+	return m_GrabObject;
+
 }
 
 void UCPhysicsHandle::ReleaseGrab()
 {
-
+	
 	if (!IsValid(m_GrabObject))
 	{
 

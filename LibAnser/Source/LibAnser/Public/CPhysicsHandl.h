@@ -19,7 +19,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class  UCPhysicsHandle : public USceneComponent
+class ALICEALLCPLUS_API UCPhysicsHandle : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -42,15 +42,15 @@ public:
 	
 
 	//抓取Actor物体
-	UFUNCTION(BlueprintCallable, Category = "VRPhysicsHandle")
-	void GrabActor( AActor* ActorToGrab = nullptr);
+	UFUNCTION(BlueprintCallable, Category = "MyPhysicsHandle")
+	AActor * GrabActor( AActor* ActorToGrab = nullptr, TSubclassOf<AActor> ClassFilter = nullptr);
 
 	//释放物体
-	UFUNCTION(BlueprintCallable, Category = "VRPhysicsHandle")
+	UFUNCTION(BlueprintCallable, Category = "MyPhysicsHandle")
 	void ReleaseGrab();
 
 	//获得抓取物体
-	UFUNCTION(BlueprintCallable, Category = "VRPhysicsHandle")
+	UFUNCTION(BlueprintCallable, Category = "MyPhysicsHandle")
 	AActor * GetGrabObject() const { return  m_GrabObject; }
 
 private:
